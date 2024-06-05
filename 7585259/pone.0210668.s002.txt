@@ -1,0 +1,24 @@
+Dataset <- 
+  read.table("C:/R/japan.txt",
+   header=TRUE, sep="", na.strings="NA", dec=".", strip.white=TRUE)
+
+# OLS regression
+
+names(Dataset)
+OLSreg<-lm(integrative~country+people+stereotypes, data=Dataset)
+summary(OLSreg)
+summary(OLSreg) -> OLSreg1
+coef=OLSreg1$coefficients[,1]
+error=OLSreg1$coefficients[,2]  
+ci1 <- list()
+for (i in 1:length(coef)){
+ci1[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.995)}
+ci1
+ci5 <- list()
+for (i in 1:length(coef)){
+ci5[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.975)}
+ci5
+ci10 <- list()
+for (i in 1:length(coef)){
+ci10[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.95)}
+ci10

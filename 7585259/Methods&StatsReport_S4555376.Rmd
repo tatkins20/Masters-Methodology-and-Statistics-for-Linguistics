@@ -1,0 +1,639 @@
+---
+title: "Written R Report - Methodology & Statistics"
+author: "Trevor Atkins"
+date: "5/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Initialization
+Download the required files.
+
+```{r}
+# download and show the following file containing the dataset:
+Dataset <- 
+  read.csv("/Users/trekkatkins/Downloads/7585259/Rasool-Winke(2019)SystemData.csv")
+summary(Dataset)
+```
+
+```{r}
+#sampling out of large dataset and setting random seed 
+set.seed(666)
+sample <- Dataset[sample(1:nrow(Dataset), 36,
+   replace=FALSE),]
+sample$Gender <- as.factor(sample$Gender)
+str(sample)
+set.seed(666)
+sample2 <- Dataset[sample(1:nrow(Dataset), 36,
+   replace=FALSE),]
+sample2$Gender <- as.factor(sample$Gender)
+```
+
+## Data Investigation
+
+```{r}
+#showing data of sample 
+summary(sample)
+summary(sample2)
+```
+
+```{r}
+head(sample)
+head(sample2)
+```
+```{r}
+table(sample$Gender)
+table(sample2$Gender)
+```
+
+```{r}
+#correlation tests between the numerical variables
+cor(sample[,c("Item16", "Mother_Tong", "Age","Item3","Item7", "Item8", "Item48", "Item49", "Item52", "Item54")])
+cor(sample2[,c("Item16", "Mother_Tong", "Age","Item3","Item7", "Item8", "Item48", "Item49", "Item52", "Item54")])
+```
+
+```{r}
+par(mfrow = c(1, 2))
+hist(sample$Item16)
+boxplot(sample$Item16)
+hist(sample$Age)
+boxplot(sample$Age)
+#hist(sample$Gender)
+#boxplot(sample$Gender)
+hist(sample$Item3)
+boxplot(sample$Item3)
+hist(sample$Item7)
+boxplot(sample$Item7)
+hist(sample$Item8)
+boxplot(sample$Item8)
+hist(sample$Item48)
+boxplot(sample$Item48)
+hist(sample$Item49)
+boxplot(sample$Item49)
+hist(sample$Item52)
+boxplot(sample$Item52)
+hist(sample$Item54)
+boxplot(sample$Item54)
+```
+```{r}
+par(mfrow = c(1, 2))
+hist(sample2$Item16)
+boxplot(sample2$Item16)
+hist(sample2$Age)
+boxplot(sample2$Age)
+#hist(sample$Gender)
+#boxplot(sample$Gender)
+hist(sample2$Item3)
+boxplot(sample2$Item3)
+hist(sample2$Item7)
+boxplot(sample2$Item7)
+hist(sample2$Item8)
+boxplot(sample2$Item8)
+hist(sample2$Item48)
+boxplot(sample2$Item48)
+hist(sample2$Item49)
+boxplot(sample2$Item49)
+hist(sample2$Item52)
+boxplot(sample2$Item52)
+hist(sample2$Item54)
+boxplot(sample2$Item54)
+```
+
+## Regression modeling 
+### The best model without interactions 
+
+```{r}
+summary(m0 <- lm(Item16 ~ Age, data = sample))
+```
+
+```{r}
+summary(m1 <- lm(Item16 ~ Age + Gender, data = sample))
+```
+```{r}
+AIC(m0) - AIC(m1)
+```
+
+```{r}
+summary(m2 <- lm(Item16 ~ Age + Gender + Item3, data = sample))
+```
+```{r}
+AIC(m1) - AIC(m2)
+```
+```{r}
+summary(m3 <- lm(Item16 ~ Age + Gender + Item3 + Item7, data=sample))
+```
+```{r}
+AIC(m2) - AIC(m3)
+```
+```{r}
+summary(m4 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8, data=sample))
+```
+```{r}
+AIC(m3) - AIC(m4)
+```
+
+```{r}
+summary(m5 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48, data=sample))
+```
+
+```{r}
+AIC(m4) - AIC(m5)
+```
+
+```{r}
+summary(m6 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49, data=sample))
+```
+
+```{r}
+AIC(m5) - AIC(m6)
+```
+
+```{r}
+summary(m7 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52, data=sample))
+```
+
+```{r}
+AIC(m6) - AIC(m7)
+```
+
+
+```{r}
+summary(m8 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52 + Item54, data=sample))
+```
+
+```{r}
+AIC(m7) - AIC(m8)
+```
+
+```{r}
+summary(ms2_0 <- lm(Item16 ~ Age, data=sample2))
+```
+
+```{r}
+summary(ms2_1 <- lm(Item16 ~ Age + Gender, data=sample2))
+```
+
+```{r}
+AIC(ms2_0) - AIC(ms2_1)
+```
+
+```{r}
+summary(ms2_2 <- lm(Item16 ~ Age + Gender + Item3, data=sample2))
+```
+
+```{r}
+AIC(ms2_1) - AIC(ms2_2)
+```
+
+```{r}
+summary(ms2_3 <- lm(Item16 ~ Age + Gender + Item3 + Item7, data=sample2))
+```
+
+```{r}
+AIC(ms2_2) - AIC(ms2_3)
+```
+
+```{r}
+summary(ms2_4 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8, data=sample2))
+```
+
+```{r}
+AIC(ms2_3) - AIC(ms2_4)
+```
+
+```{r}
+summary(ms2_5 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48, data=sample2))
+```
+
+```{r}
+AIC(ms2_4) - AIC(ms2_5)
+```
+
+```{r}
+summary(ms2_6 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49, data=sample2))
+```
+
+```{r}
+AIC(ms2_5) - AIC(ms2_6)
+```
+
+```{r}
+summary(ms2_7 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52, data=sample2))
+```
+
+```{r}
+AIC(ms2_6) - AIC(ms2_7)
+```
+
+```{r}
+summary(ms2_8 <- lm(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52 + Item54, data=sample2))
+```
+
+```{r}
+AIC(ms2_7) - AIC(ms2_8)
+```
+
+### Visualize the results
+
+```{r}
+library(visreg)  
+par(mfrow = c(2, 2))
+visreg(m7)
+```
+
+```{r}
+library(visreg) 
+par(mfrow = c(2, 2))
+visreg(ms2_7)
+```
+
+### Assess the standard linear regression assumptions 
+
+```{r}
+# linearity
+library(car)  
+par(mfrow = c(1, 3))
+crPlot(m7, var = "Age")  
+crPlot(m7, var = "Gender")
+crPlot(m7, var = "Item3")
+crPlot(m7, var = "Item7")  
+crPlot(m7, var = "Item8")
+crPlot(m7, var = "Item48")
+crPlot(m7, var = "Item49")  
+crPlot(m7, var = "Item52")
+```
+
+```{r}
+# linearity
+library(car)  
+par(mfrow = c(1, 3))
+crPlot(ms2_7, var = "Age")  
+crPlot(ms2_7, var = "Gender")
+crPlot(ms2_7, var = "Item3")
+crPlot(ms2_7, var = "Item7")  
+crPlot(ms2_7, var = "Item8")
+crPlot(ms2_7, var = "Item48")
+crPlot(ms2_7, var = "Item49")  
+crPlot(ms2_7, var = "Item52")
+```
+
+```{r}
+par(mfrow = c(1, 1))
+
+# autocorrelation in residuals: 
+acf(resid(m7))
+```
+
+```{r}
+par(mfrow = c(1, 1))
+
+# autocorrelation in residuals: 
+acf(resid(ms2_7))
+```
+
+```{r}
+# multicollinearity: 
+car::vif(m7)  
+```
+
+```{r}
+# multicollinearity: for Age and Item48, the (G)VIF > 5 - violated
+car::vif(ms2_7)  
+```
+
+```{r}
+# homoscedasticity: 
+plot(fitted(m7), resid(m7))
+```
+
+```{r}
+# homoscedasticity: 
+plot(fitted(ms2_7), resid(ms2_7))
+```
+
+```{r}
+# significant heteroscedasticity (p-value < 0.05)
+ncvTest(m7)
+```
+
+```{r}
+ncvTest(m7, ~Age)
+```
+
+```{r}
+ncvTest(m7, ~Gender)
+```
+
+```{r}
+ncvTest(m7, ~Item3)
+```
+
+```{r}
+ncvTest(m7, ~Item7)
+```
+
+```{r}
+ncvTest(m7, ~Item48)
+```
+
+```{r}
+ncvTest(m7, ~Item49)
+```
+
+```{r}
+ncvTest(m7, ~Item52)
+```
+
+
+```{r}
+library(MASS)
+MASS::boxcox(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52, data=sample)
+
+#library(moments)
+#skewness(sample$Item3, na.rm = TRUE)
+#sample$Item3.transformSkew <- log10(max(sample$Item3+1) - sample$Item3)
+sample$Item16.0.99 <- sample$Item16^0.99
+m7 <- lm(Item16.0.99 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52, data=sample)
+summary(m7)
+ncvTest(m7)
+```
+
+
+```{r}
+# no significant heteroscedasticity (p-value > 0.05)
+ncvTest(ms2_7)
+```
+
+```{r}
+ncvTest(ms2_7, ~Age)
+```
+
+```{r}
+ncvTest(ms2_7, ~Gender)
+```
+
+```{r}
+ncvTest(ms2_7, ~Item3)
+```
+
+```{r}
+ncvTest(ms2_7, ~Item7)
+```
+
+```{r}
+ncvTest(ms2_7, ~Item48)
+```
+
+```{r}
+ncvTest(ms2_7, ~Item49)
+```
+
+```{r}
+ncvTest(ms2_7, ~Item52)
+```
+
+```{r}
+shapiro.test(resid(m7))$p.value
+# distribution of residuals: 
+qqnorm(resid(m7))
+qqline(resid(m7))
+```
+
+```{r}
+shapiro.test(resid(ms2_7))$p.value
+# distribution of residuals: 
+qqnorm(resid(ms2_7))
+qqline(resid(ms2_7))
+```
+
+
+```{r}
+summary(m7)
+summary(m7) -> OLSreg1
+coef=OLSreg1$coefficients[,1]
+error=OLSreg1$coefficients[,2]  
+ci1 <- list()
+for (i in 1:length(coef)){
+ci1[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.995)}
+ci1
+ci5 <- list()
+for (i in 1:length(coef)){
+ci5[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.975)}
+ci5
+ci10 <- list()
+for (i in 1:length(coef)){
+ci10[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.95)}
+ci10
+
+```
+
+### Bootstrap sampling
+```{r}
+
+# Bootstrap OLS regression
+library(boot)
+bs <- function(formula, data, indices) {
+d <- data[indices,]  
+   fit <- lm(formula, data=d)
+   return(coef(fit)) 
+ } 
+Bootreg <-boot(data=sample,statistic=bs,R=1000, formula=Item16.0.99 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52)
+summary(Bootreg)
+
+pdf(file="/Users/trekkatkins/Downloads/7585259/figure1.pdf")
+plot(Bootreg, index=1) # intercept 
+plot(Bootreg, index=2) #
+plot(Bootreg, index=3) # 
+plot(Bootreg, index=4) # 
+plot(Bootreg, index=5) #
+plot(Bootreg, index=6) # 
+plot(Bootreg, index=7) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=1) # intercept 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=2) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=3) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=4) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=5) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=6) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=7) # 
+dev.off
+```
+
+```{r}
+# Quantile regression 
+library(quantreg)
+Qreg1 <- rq(Item16.0.99 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52, tau = .5, data=sample)
+summary(Qreg1, se="iid", bsmethod="xy")
+summary(Qreg1, se="iid", bsmethod="xy") -> Qreg2
+coef=Qreg2$coefficients[,1] 
+error=Qreg2$coefficients[,2]  
+ci1 <- list()
+for (i in 1:length(coef)){
+ci1[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.995)}
+ci1
+ci5 <- list()
+for (i in 1:length(coef)){
+ci5[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.975)}
+ci5
+ci10 <- list()
+for (i in 1:length(coef)){
+ci10[[i]] <- coef[i] + c(-1,1)*error[i]*qnorm(0.95)}
+ci10
+```
+
+```{r}
+# Bootstrap Qunantile regression
+
+library(quantreg)
+bs <- function(formula, data, indices) {
+d <- data[indices,]  
+   fit <- rq(formula, tau=0.5, data=d)
+   return(coef(fit)) 
+ } 
+library(quantreg)
+library(boot)
+Bootreg <-boot(data=sample,statistic=bs,R=1000, formula=Item16.0.99 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52)
+summary(Bootreg)
+pdf(file="/Users/trekkatkins/Downloads/7585259/figure2.pdf")
+plot(Bootreg, index=1) # intercept 
+plot(Bootreg, index=2) # 
+plot(Bootreg, index=3) # 
+plot(Bootreg, index=4) #  
+plot(Bootreg, index=5) # 
+plot(Bootreg, index=6) # 
+plot(Bootreg, index=7) #  
+plot(Bootreg, index=8) #  
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=1) # intercept 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=2) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=3) #
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=4) #
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=5) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=6) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=7) # 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99), index=8) #
+library(quantreg)
+
+dev.off
+```
+
+
+```{r}
+summary(ms2_7)
+summary(ms2_7) -> OLSreg2
+coef2=OLSreg2$coefficients[,1]
+error2=OLSreg2$coefficients[,2]  
+ci2_1 <- list()
+for (i in 1:length(coef2)){
+ci2_1[[i]] <- coef2[i] + c(-1,1)*error2[i]*qnorm(0.995)}
+ci2_1
+ci2_5 <- list()
+for (i in 1:length(coef2)){
+ci2_5[[i]] <- coef2[i] + c(-1,1)*error2[i]*qnorm(0.975)}
+ci2_5
+ci2_10 <- list()
+for (i in 1:length(coef2)){
+ci2_10[[i]] <- coef2[i] + c(-1,1)*error2[i]*qnorm(0.95)}
+ci2_10
+
+```
+
+### Bootstrap sampling
+```{r}
+
+# Bootstrap OLS regression
+library(boot)
+bs <- function(formula, data, indices) {
+d <- data[indices,]  
+   fit <- lm(formula, data=d)
+   return(coef(fit)) 
+ } 
+Bootreg2 <-boot(data=sample2,statistic=bs,R=1000, formula=Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52)
+summary(Bootreg2)
+
+pdf(file="/Users/trekkatkins/Downloads/7585259/figure3.pdf")
+plot(Bootreg2, index=1) # intercept 
+plot(Bootreg2, index=2) # 
+plot(Bootreg2, index=3) # 
+plot(Bootreg2, index=4) # 
+plot(Bootreg2, index=5) # 
+plot(Bootreg2, index=6) # 
+plot(Bootreg2, index=7) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=1) # intercept 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=2) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=3) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=4) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=5) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=6) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99), index=7) #
+dev.off
+```
+
+```{r}
+# Quantile regression 
+library(quantreg)
+Qreg3 <- rq(Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52, tau = .5, data=sample2)
+summary(Qreg3, se="iid", bsmethod="xy")
+summary(Qreg3, se="iid", bsmethod="xy") -> Qreg4
+coef3=Qreg4$coefficients[,1] 
+error4=Qreg4$coefficients[,2]  
+ci3_1 <- list()
+for (i in 1:length(coef3)){
+ci3_1[[i]] <- coef3[i] + c(-1,1)*error4[i]*qnorm(0.995)}
+ci3_1
+ci3_5 <- list()
+for (i in 1:length(coef3)){
+ci3_5[[i]] <- coef3[i] + c(-1,1)*error4[i]*qnorm(0.975)}
+ci3_5
+ci3_10 <- list()
+for (i in 1:length(coef)){
+ci3_10[[i]] <- coef3[i] + c(-1,1)*error4[i]*qnorm(0.95)}
+ci3_10
+```
+
+```{r}
+# Bootstrap Qunantile regression
+
+library(quantreg)
+bs <- function(formula, data, indices) {
+d <- data[indices,]  
+   fit <- rq(formula, tau=0.5, data=d)
+   return(coef(fit)) 
+ } 
+library(quantreg)
+library(boot)
+Bootreg2 <-boot(data=sample2,statistic=bs,R=1000, formula=Item16 ~ Age + Gender + Item3 + Item7 + Item8 + Item48 + Item49 + Item52)
+summary(Bootreg2)
+pdf(file="/Users/trekkatkins/Downloads/7585259/figure4.pdf")
+plot(Bootreg2, index=1) # intercept 
+plot(Bootreg2, index=2) # 
+plot(Bootreg2, index=3) # 
+plot(Bootreg2, index=4) # 
+plot(Bootreg2, index=5) # 
+plot(Bootreg2, index=6) # 
+plot(Bootreg2, index=7) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=1) # intercept 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=2) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=3) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=4) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=5) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=6) # 
+boot.ci(Bootreg2, type="perc", conf=c(0.90,0.95,0.99),index=7) # 
+
+library(quantreg)
+
+dev.off
+```
+
+### Effect size
+
+```{r}
+library(lmSupport)  
+summary(m7)$adj.r.squared  # adjusted R^2
+summary(ms2_7)$adj.r.squared  # adjusted R^2
+modelEffectSizes(m7)  # partial eta-squared
+modelEffectSizes(ms2_7)  # partial eta-squared
+```
+
+

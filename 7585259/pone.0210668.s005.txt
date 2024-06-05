@@ -1,0 +1,28 @@
+Dataset <- 
+  read.table("C:/R/japan.txt",
+   header=TRUE, sep="", na.strings="NA", dec=".", strip.white=TRUE)
+
+# Bootstrap Qunantile regression
+
+library(quantreg)
+bs <- function(formula, data, indices) {
+d <- data[indices,]  
+   fit <- rq(formula, tau=0.5, data=d)
+   return(coef(fit)) 
+ } 
+library(quantreg)
+library(boot)
+Bootreg <-boot(data=Dataset,statistic=bs,R=1000, formula=integrative~country+people+stereotypes)
+summary(Bootreg)
+pdf(file="C:/R/figure2.pdf")
+plot(Bootreg, index=1) # intercept 
+plot(Bootreg, index=2) # country 
+plot(Bootreg, index=3) # people
+plot(Bootreg, index=4) # stereotypes 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=1) # intercept 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=2) # country 
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=3) # people
+boot.ci(Bootreg, type="perc", conf=c(0.90,0.95,0.99),index=4) # stereotypes
+library(quantreg)
+
+dev.off<>
